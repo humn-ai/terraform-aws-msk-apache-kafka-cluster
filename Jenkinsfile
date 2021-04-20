@@ -34,6 +34,7 @@ pipeline {
             when {
                 allOf {
                     branch 'master'
+                    equals expected: "SUCCESS", actual: currentBuild.currentResult
                 }
             }
 
@@ -42,6 +43,11 @@ pipeline {
             }
 
             steps {
+                withCredentials([usernamePassword(credentialsId: 'humn/ci/dockerhub/humnrw', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh "docker login --username ${USERNAME} --password ${PASSWORD}"
+                    sh "docker push aihumn/kafka-topics:${new_version}"
+                    sh "docker push aihumn/kafka-topics:latest"
+                }
                 withCredentials([usernamePassword(credentialsId: 'humn/ci/github/humnrw', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "git remote set-url origin 'https://${USERNAME}:${PASSWORD}@github.com/humn-ai/tf-mod-aws-msk-apache-kafka-cluster'"
                     sh "git tag -a ${new_version} -m 'New version ${new_version}'"
