@@ -10,6 +10,8 @@ pipeline {
    agent { label 'ec2' }
 
     stages {
+
+
         stage('Versioning') {
             steps {
                 script {
@@ -17,6 +19,14 @@ pipeline {
                     echo "current version ${current_version}"
                     new_version = incrementVersion(current_version)
                     echo "new version ${new_version}"
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'humn/ci/github/humnro', usernameVariable: 'git_username', passwordVariable: 'git_password')]) {
+                    sh "echo 'default login ${git_username} password ${git_password}' > .netrc"
+                    sh "./build.sh ${new_version}"
                 }
             }
         }
