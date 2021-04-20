@@ -6,6 +6,6 @@ provider "aws" {
   }
 }
 
-provider "kafka" {
-  bootstrap_servers = aws_msk_cluster.default.*.bootstrap_brokers != [] ? aws_msk_cluster.default.*.bootstrap_brokers : var.bootstrap_servers
-}
+# provider "kafka" {
+#   bootstrap_servers = aws_msk_cluster.default.*.bootstrap_brokers != [] ? aws_msk_cluster.default.*.bootstrap_brokers : var.bootstrap_servers
+# }

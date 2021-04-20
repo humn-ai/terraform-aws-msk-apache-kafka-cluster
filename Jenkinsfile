@@ -22,14 +22,6 @@ pipeline {
                 }
             }
         }
-        stage('Build') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'humn/ci/github/humnro', usernameVariable: 'git_username', passwordVariable: 'git_password')]) {
-                    sh "echo 'default login ${git_username} password ${git_password}' > .netrc"
-                    sh "./build.sh ${new_version}"
-                }
-            }
-        }
         stage('Tag & Push') {
             when {
                 allOf {
