@@ -59,6 +59,7 @@ resource "aws_msk_configuration" "config" {
 }
 
 resource "aws_msk_cluster" "default" {
+  depends_on             = [aws_cloudwatch_log_group.default]
   count                  = module.this.enabled ? 1 : 0
   cluster_name           = var.cluster_name != "" ? var.cluster_name : module.this.id
   kafka_version          = var.kafka_version
@@ -118,7 +119,7 @@ resource "aws_msk_cluster" "default" {
     broker_logs {
       cloudwatch_logs {
         enabled   = var.cloudwatch_logs_enabled
-        log_group = var.cloudwatch_logs_log_group != "" ? var.cloudwatch_logs_log_group : aws_cloudwatch_log_group.default.0.arn
+        log_group = var.cloudwatch_logs_log_group != "" ? var.cloudwatch_logs_log_group : module.this.id
       }
       firehose {
         enabled         = var.firehose_logs_enabled
@@ -131,7 +132,7 @@ resource "aws_msk_cluster" "default" {
       }
     }
   }
-  
+
 
   tags = module.this.tags
 }
