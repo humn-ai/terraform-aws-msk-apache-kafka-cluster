@@ -118,7 +118,7 @@ resource "aws_msk_cluster" "default" {
     broker_logs {
       cloudwatch_logs {
         enabled   = var.cloudwatch_logs_enabled
-        log_group = var.cloudwatch_logs_log_group
+        log_group = var.cloudwatch_logs_log_group != "" ? var.cloudwatch_logs_log_group : aws_cloudwatch_log_group.default.0.arn
       }
       firehose {
         enabled         = var.firehose_logs_enabled
@@ -131,8 +131,17 @@ resource "aws_msk_cluster" "default" {
       }
     }
   }
+  
 
   tags = module.this.tags
+}
+
+resource "aws_cloudwatch_log_group" "default" {
+  count             = module.this.enabled ? 1 : 0
+  name              = module.this.id
+  retention_in_days = var.retention_in_days
+  tags              = module.this.tags
+  kms_key_id        = var.kms_key_arn
 }
 
 resource "aws_msk_scram_secret_association" "default" {
