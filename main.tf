@@ -138,10 +138,10 @@ resource "aws_msk_cluster" "default" {
 }
 
 resource "aws_cloudwatch_log_group" "default" {
-  count             = module.this.enabled ? 1 : 0
-  name              = module.this.id
+  count             = module.log_group.enabled ? 1 : 0
+  name              = module.log_group.id
   retention_in_days = var.retention_in_days
-  tags              = module.this.tags
+  tags              = module.log_group.tags
   kms_key_id        = var.kms_key_arn
 }
 
