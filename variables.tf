@@ -89,6 +89,12 @@ variable "existing_security_groups" {
   description = "List of security group IDs to be allowed to connect to the cluster"
 }
 
+variable "additional_security_groups" {
+  type        = list(string)
+  default     = []
+  description = "List of additional security group IDs to be allowed to connect to the cluster"
+}
+
 variable "security_groups" {
   type        = list(string)
   default     = []
