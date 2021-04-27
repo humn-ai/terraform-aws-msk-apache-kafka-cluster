@@ -119,7 +119,7 @@ resource "aws_msk_cluster" "default" {
     broker_logs {
       cloudwatch_logs {
         enabled   = var.cloudwatch_logs_enabled
-        log_group = var.cloudwatch_logs_log_group != "" ? var.cloudwatch_logs_log_group : module.this.id
+        log_group = var.cloudwatch_logs_log_group != "" ? var.cloudwatch_logs_log_group : module.log_group.id
       }
       firehose {
         enabled         = var.firehose_logs_enabled
